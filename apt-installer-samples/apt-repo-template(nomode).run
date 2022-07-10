@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+name="Microsoft Edge"
+aptname="microsoft-edge-stable"
+gpg_url="https://packages.microsoft.com/keys/microsoft.asc"
+gpg_name="microsoft.asc"
+apt_url="https://dl.google.com/linux/chrome/deb"
+args_apt="deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main"
+aptfilename="testedge"
+#set if variable
+
+if sudo -nv 2>/dev/null && sudo -v ; then
+    echo "Sudo access found; using sudo method"
+    ISSudoAccess="f"
+else
+    echo "Sudo access not found; implementing pkexec method" && 
+    ISSudoAccess="nf"
+fi
+
+# warn if issudoaccess == nf (not found)
+if [ "$ISSudoAccess" = "nf" ] 
+then
+    zenity --info --text="You are not running as root. Running this as root is recommended. Using pkexec method"
+fi
+# ____________________________________________________________
+
+zenity --info --title="${name} installer" --text=" Welcome to the ${name} installer!\ Would you like to install ${name}? " --icon-name="$blank" --no-wrap
+
+
+# ____________________________________________________________
+
+
+    if [ "SISSudoAccess" = "f" ]
+    then
+        sudo sh -c "sudo apt install wget gpg-tools -y && cd /tmp/ && wget "${gpg_url}" && sudo apt-key add "${gpg_name}" && sudo echo $args_apt > /etc/apt/sources.list.d/"${aptfilename}".list && sudo sudo apt update && sudo apt install "${aptname}" -y"
+    else
+        pkexec sh -c "sudo apt install wget gnupg -y && cd /tmp/ && wget "${gpg_url}" && gpg --dearmor "${gpg_name}" && sudo apt-key add "${gpg_name}".gpg && sudo echo $args_apt > /etc/apt/sources.list.d/"${aptfilename}".list && sudo  apt update && sudo apt install "${aptname}" -y"
+    fi
+
