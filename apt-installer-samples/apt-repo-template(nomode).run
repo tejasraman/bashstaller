@@ -3,7 +3,6 @@ name="Microsoft Edge"
 aptname="microsoft-edge-stable"
 gpg_url="https://packages.microsoft.com/keys/microsoft.asc"
 gpg_name="microsoft.asc"
-apt_url="https://dl.google.com/linux/chrome/deb"
 args_apt="deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main"
 aptfilename="testedge"
 #set if variable

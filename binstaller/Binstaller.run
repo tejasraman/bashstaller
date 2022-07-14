@@ -1,53 +1,46 @@
 #!/usr/bin/env bash
-appname="your fancy app name"
+name="your fancy app name"
+defaultpath="/usr/bin/"
+binname="jodin3"
+desktopfilepath="/usr/share/applications/${name}.desktop"
+nonrootpath="/home/$USER/bin/"
+localdesktopfilepath="/home/$USER/.local/share/applications/${name}s"
+create_us="true"
+#DL links
+desktopfilelink="https://"
+binlink="https://"
 #set if variable
 if sudo -nv 2>/dev/null && sudo -v ; then
-    echo "Sudo access found; using sudo method"
     ISSudoAccess="f"
 else
-    echo "Sudo access not found; implementing pkexec method" && 
     ISSudoAccess="nf"
 fi
 
 # warn if issudoaccess == nf (not found)
 if [ "$ISSudoAccess" = "nf" ] 
 then
-    zenity --info --text="You are not running as root. Running this as root is recommended. Using pkexec method"
-fi
-# ____________________________________________________________
-
-zenity --warning --title="Welcome to InsertNameHere installer" --text='Welcome to the insert name here installer!\ Would you like to install insert name here?' --icon-name="$blank" --no-wrap
-
-# ____________________________________________________________
-
-if  [ "$ISSudoAccess" = "nf" ] 
-then
-    ask="$(zenity --list --title="WHATEVER Options" --column="0" "Root mode" "User mode" --width=100 --height=300 --hide-header)"
+    zenity --info --text="Installing ${name} for all users"
 else
-    zenity --warning --title="Installing in root mode" --text='We are installing in root for all users. Please run without root to enable user mode'  --no-wrap
+    zenity --info --text="Installing ${name} for only your user"
 fi
-
 # ____________________________________________________________
 
-if [ "$ask" == "Root mode" ]; then
-    RootMode=1
-fi
+zenity --warning --title="Welcome to ${name} installer" --text='Welcome to the ${name} installer!\ Would you like to install ${name}?' --icon-name="$blank" --no-wrap
 
-if [ "$ask" == "User mode" ]; then
-    RootMode=0
-fi
-
+# ____________________________________________________________
 
 
 if [ "SISSudoAccess" = "f" ]
 then
-    sudo apt install wget -y
-    cd /tmp/
-    wget https://dl.google.com/linux/linux_signing_key.pub
-    sudo apt-key add linux_signing_key.pub
-    sudo apt update
-    sudo apt install google-chrome -y
+    curl "${desktopfilelink}" -o ${desktopfilepath}${binname}
+    curl "${binlink}" -o ${defaultpath}
+    touch ${desktopfilepath}${name}-uninstaller && chmod 777 ${desktopfilepath}${name}-uninstaller && chmod +x ${desktopfilepath}${name}-uninstaller
+    echo "pkexec sh -c 'rm -rf ${desktopfilepath} && rm -r ${defaultpath}${name}' " > ${desktopfilepath}${name}-uninstaller
+    
 elif [ "SISSudoAccess" = "nf" ]
 then
-    pkexec sh -c "sudo apt install wget -y && cd /tmp/ && wget https://dl.google.com/linux/linux_signing_key.pub && sudo apt-key add linux_signing_key.pub && sudo apt update && sudo apt install google-chrome -y"
+    curl "${desktopfilelink}" -o ${localdesktopfilepath}
+    curl "${binlink}" -o ${nonrootpath}${binname}
+    touch ${localdesktopfilepath}${name}-uninstaller && chmod 777 ${localdesktopfilepath}${name}-uninstaller && chmod +x ${localdesktopfilepath}${name}-uninstaller
+    echo "pkexec sh -c 'rm -rf ${localdesktopfilepath} && rm -r ${nonrootpath}${name}' " > ${localdesktopfilepath}${name}-uninstaller
 fi
