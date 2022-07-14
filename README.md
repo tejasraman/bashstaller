@@ -12,7 +12,7 @@ Future versions of the script will include a way to add dependencies for install
 ### TODO:
 * Make from-source and binary file installers
 * Make a way to store file contents inside script for static binaries
-* Make a wxWidgets version for easy use with cython to create a binary installer
+* Make a wxWidgets version for easy use with cython to create a fully platform-native/binary installer
 
 ### Credits:
 * GNOME for zenity
