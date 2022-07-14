@@ -10,7 +10,7 @@ These installers use the power of shell scripting to create a powerful, GTK-cent
 Future versions of the script will include a way to add dependencies for installation.
 
 ### TODO:
-* Make from-source and binary file installers
+* Make from-source installers
 * Make a way to store file contents inside script for static binaries
 * Make a wxWidgets version for easy use with cython to create a fully platform-native/binary installer
 
